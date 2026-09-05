@@ -48,7 +48,8 @@ func SplitShifts(orders []string, morningCount int) (morning, evening []string) 
 	if morningCount > len(orders) {
 		morningCount = len(orders)
 	}
-	return orders[:morningCount], orders[morningCount:]
+
+	return orders[:morningCount:morningCount], orders[morningCount:]
 }
 
 // AppendRush adds a late-arriving rush order to a shift.
@@ -56,3 +57,17 @@ func SplitShifts(orders []string, morningCount int) (morning, evening []string) 
 func AppendRush(shift []string, orderID string) []string {
 	return append(shift, orderID)
 }
+
+// ORIGINAL (before fix):
+//
+// func SplitShifts(orders []string, morningCount int) (morning, evening []string) {
+// 	if morningCount < 0 {
+// 		morningCount = 0
+// 	}
+// 	if morningCount > len(orders) {
+// 		morningCount = len(orders)
+// 	}
+// 	// BUG: morning's capacity runs to the end of the array, so appending to it
+// 	// writes into index morningCount — which is evening[0].
+// 	return orders[:morningCount], orders[morningCount:]
+// }
