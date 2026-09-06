@@ -1,5 +1,7 @@
 package exercises
 
+import "slices"
+
 // Exercise 3 — IMPLEMENT: filter in place without leaking what you dropped.
 //
 // The planning service holds the day's work orders in one long slice and
@@ -57,6 +59,15 @@ type WorkOrder struct {
 // CompactActive filters orders down to the ACTIVE ones, in place, and leaves no
 // dropped *WorkOrder reachable through the backing array.
 func CompactActive(orders []*WorkOrder) []*WorkOrder {
-	// TODO: implement.
+	if len(orders) == 0 || orders == nil {
+		return []*WorkOrder{}
+	}
+
+	for index := 0; index < len(orders); index += 1 {
+		if orders[index].Status != "ACTIVE" {
+			orders = slices.Delete(orders, index, index+1)
+			index -= 1
+		}
+	}
 	return orders
 }
